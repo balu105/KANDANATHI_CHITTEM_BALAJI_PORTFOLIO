@@ -155,7 +155,7 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-20">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-10 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -229,7 +229,7 @@ const Hero = () => {
 };
 
 const SectionHeader = ({ label, title, description }: { label: string, title: string, description?: string }) => (
-  <div className="mb-12 text-center md:text-left">
+  <div className="mb-8 text-center md:text-left">
     <span className="text-indigo-600 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 block">{label}</span>
     <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-neutral-900 mb-4 tracking-tight">{title}</h2>
     {description && <p className="text-neutral-500 max-w-2xl text-sm sm:text-base leading-relaxed">{description}</p>}
@@ -245,8 +245,8 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-32 max-w-7xl mx-auto px-6">
-      <div className="grid lg:grid-cols-2 gap-24 items-center">
+    <section id="about" className="py-12 max-w-7xl mx-auto px-6">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -334,7 +334,7 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-32 relative">
+    <section id="skills" className="py-12 relative">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader label="Expertise" title="Skills & Technologies" />
         
@@ -422,7 +422,7 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-32 max-w-7xl mx-auto px-6">
+    <section id="projects" className="py-12 max-w-7xl mx-auto px-6">
       <SectionHeader label="Portfolio" title="Featured Projects" />
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -500,13 +500,13 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experience" className="py-32 relative overflow-hidden">
+    <section id="experience" className="py-12 relative overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="mb-20 text-center md:text-left">
+        <div className="mb-10 text-center md:text-left">
           <span className="text-indigo-600 font-bold text-sm uppercase tracking-widest mb-3 block">Career</span>
           <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-neutral-900">Experience & Internships</h2>
         </div>
@@ -571,7 +571,7 @@ const Education = () => {
   ];
 
   return (
-    <section id="education" className="py-32 max-w-7xl mx-auto px-6">
+    <section id="education" className="py-12 max-w-7xl mx-auto px-6">
       <SectionHeader label="Academics" title="Education" />
       
       <div className="grid md:grid-cols-3 gap-10">
@@ -641,7 +641,7 @@ const Certifications = () => {
   ];
 
   return (
-    <section id="certifications" className="py-32">
+    <section id="certifications" className="py-12">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader label="Credentials" title="Certifications" />
         
@@ -714,8 +714,8 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-32 max-w-7xl mx-auto px-6">
-      <div className="grid lg:grid-cols-2 gap-24">
+    <section id="contact" className="py-12 max-w-7xl mx-auto px-6">
+      <div className="grid lg:grid-cols-2 gap-12">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -738,14 +738,14 @@ const Contact = () => {
                 href={item.href}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-8 group"
+                className="flex items-center gap-8 group no-underline"
               >
                 <div className="w-16 h-16 flex items-center justify-center rounded-[1.5rem] glass text-neutral-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-lg">
                   <item.icon size={28} />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.2em] mb-1">{item.label}</p>
-                  <p className="text-lg text-neutral-900 font-bold group-hover:text-indigo-600 transition-colors duration-300">{item.value}</p>
+                  <p className="text-lg font-bold text-neutral-900 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all duration-300">{item.value}</p>
                 </div>
               </a>
             ))}
