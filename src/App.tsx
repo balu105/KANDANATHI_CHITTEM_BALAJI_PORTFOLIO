@@ -403,7 +403,8 @@ const Projects = () => {
       description: 'AI-powered real-time spoken grammar correction using NLP & speech recognition.',
       tags: ['Python', 'NLP', 'Flask'],
       image: 'https://images.unsplash.com/photo-1589254065909-b7086229d08c?w=800&q=80',
-      link: 'https://github.com/balu105/grammer_corrector_app'
+      link: 'https://github.com/balu105/grammer_corrector_app',
+      live: 'https://grammer-corrector-app-2.onrender.com/'
     },
     {
       title: 'Personal Portfolio Website',
@@ -417,7 +418,8 @@ const Projects = () => {
       description: 'ML model predicting employee performance from historical data for HR decisions.',
       tags: ['Python', 'Scikit-learn', 'ML'],
       image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80',
-      link: 'https://github.com/balu105/employee_performance_prediction'
+      link: 'https://github.com/balu105/employee_performance_prediction',
+      live: 'https://employee-performance-prediction-5.onrender.com/'
     }
   ];
 
@@ -463,15 +465,27 @@ const Projects = () => {
               <p className="text-neutral-500 text-sm sm:text-base mb-8 leading-relaxed line-clamp-2 font-light">{project.description}</p>
               
               <div className="flex items-center justify-between pt-6 border-t border-neutral-100">
-                <a 
-                  href={project.link} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="flex items-center gap-2 text-sm font-bold text-indigo-600 hover:gap-3 transition-all"
-                >
-                  <Github size={18} /> View Code
-                </a>
-                <ChevronRight size={20} className="text-neutral-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                <div className="flex gap-4">
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="flex items-center gap-2 text-sm font-bold text-neutral-600 hover:text-indigo-600 transition-all"
+                  >
+                    <Github size={18} /> Code
+                  </a>
+                  {project.live && (
+                    <a 
+                      href={project.live} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="flex items-center gap-2 text-sm font-bold text-indigo-600 hover:gap-3 transition-all"
+                    >
+                      <ExternalLink size={18} /> Live Demo
+                    </a>
+                  )}
+                </div>
+                {!project.live && <ChevronRight size={20} className="text-neutral-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />}
               </div>
             </div>
           </motion.div>
@@ -727,27 +741,22 @@ const Contact = () => {
             Whether it's a Java backend role, a full-stack project, a data analysis task, or an AI/ML challenge — I'm excited to connect and contribute.
           </p>
           
-          <div className="space-y-8">
+          <div className="flex justify-start gap-6">
             {[
-              { icon: Mail, label: 'Email', value: 'balajikc89@gmail.com', href: 'mailto:balajikc89@gmail.com' },
-              { icon: Github, label: 'GitHub', value: 'github.com/balu105', href: 'https://github.com/balu105' },
-              { icon: Linkedin, label: 'LinkedIn', value: 'LinkedIn Profile', href: 'https://linkedin.com/in/' }
-            ].map((item, i) => (
-              <a 
+              { icon: Github, href: "https://github.com/balu105" },
+              { icon: Linkedin, href: "https://linkedin.com/in/" },
+              { icon: Mail, href: "mailto:balajikc89@gmail.com" }
+            ].map((social, i) => (
+              <motion.a
                 key={i}
-                href={item.href}
+                href={social.href}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-8 group no-underline"
+                whileHover={{ y: -5 }}
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-neutral-100 text-neutral-600 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all"
               >
-                <div className="w-16 h-16 flex items-center justify-center rounded-[1.5rem] glass text-neutral-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-lg">
-                  <item.icon size={28} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.2em] mb-1">{item.label}</p>
-                  <p className="text-lg font-bold text-neutral-900 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all duration-300">{item.value}</p>
-                </div>
-              </a>
+                <social.icon size={20} />
+              </motion.a>
             ))}
           </div>
         </motion.div>
@@ -837,11 +846,22 @@ const Footer = () => (
       </div>
       
       <div className="flex flex-col items-center md:items-end gap-6">
-        <div className="flex gap-4">
-          {[Github, Linkedin, Mail].map((Icon, i) => (
-            <a key={i} href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl glass text-neutral-400 hover:bg-indigo-600 hover:text-white transition-all duration-500 shadow-sm">
-              <Icon size={20} />
-            </a>
+        <div className="flex gap-6">
+          {[
+            { icon: Github, href: "https://github.com/balu105" },
+            { icon: Linkedin, href: "https://linkedin.com/in/" },
+            { icon: Mail, href: "mailto:balajikc89@gmail.com" }
+          ].map((social, i) => (
+            <motion.a
+              key={i}
+              href={social.href}
+              target="_blank"
+              rel="noreferrer"
+              whileHover={{ y: -5 }}
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-neutral-100 text-neutral-600 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all"
+            >
+              <social.icon size={20} />
+            </motion.a>
           ))}
         </div>
         <p className="text-neutral-400 text-[10px] font-bold uppercase tracking-[0.2em]">
