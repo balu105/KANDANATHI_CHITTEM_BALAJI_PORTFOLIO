@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import { 
   Github, 
@@ -20,7 +20,9 @@ import {
   ArrowUp,
   Terminal,
   Layers,
-  Send
+  Send,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 
 // --- Components ---
@@ -46,26 +48,26 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'glass border-b border-neutral-200/50 py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'glass border-b border-neutral-200/50 py-3' : 'bg-transparent py-4 md:py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="text-2xl font-display font-bold text-indigo-600 tracking-tight group">
+        <a href="#" className="text-xl sm:text-2xl font-display font-bold text-indigo-600 tracking-tight group">
           KC.<span className="text-neutral-900 group-hover:text-indigo-600 transition-colors">Balaji</span>
         </a>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-4 lg:gap-8">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href} 
-              className="text-sm font-medium text-neutral-600 hover:text-indigo-600 transition-colors"
+              className="text-xs lg:text-sm font-medium text-neutral-600 hover:text-indigo-600 transition-colors"
             >
               {link.name}
             </a>
           ))}
           <a 
             href="#contact" 
-            className="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-full hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg active:scale-95"
+            className="px-4 lg:px-6 py-2 lg:py-2.5 bg-indigo-600 text-white text-xs lg:text-sm font-bold rounded-full hover:bg-indigo-700 transition-all shadow-md hover:shadow-indigo-500/20 active:scale-95 whitespace-nowrap"
           >
             Hire Me
           </a>
@@ -130,7 +132,7 @@ const Hero = () => {
   }, [text, isDeleting, roleIndex]);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {[...Array(30)].map((_, i) => (
@@ -153,17 +155,13 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-indigo-600 text-[10px] font-bold uppercase tracking-widest mb-10 border border-indigo-100/50">
-            <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
-            Available for Hire
-          </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-neutral-900 mb-8 leading-[1.1] tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-display font-extrabold text-neutral-900 mb-8 leading-[1.1] tracking-tight">
             Hi, I'm <span className="text-gradient">K.C. Balaji</span>
           </h1>
           <div className="h-10 mb-8">
@@ -174,22 +172,29 @@ const Hero = () => {
           <p className="text-sm sm:text-base md:text-lg text-neutral-500 max-w-2xl mx-auto mb-12 leading-relaxed">
             Java Full-Stack • Data Analytics • AI / ML Engineering
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
             <a 
               href="#projects" 
-              className="px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 hover:shadow-indigo-300 active:scale-95"
+              className="btn-primary"
             >
               View Projects
             </a>
             <a 
               href="#contact" 
-              className="px-8 py-4 bg-white text-neutral-900 font-bold rounded-xl border border-neutral-200 hover:border-indigo-600 hover:text-indigo-600 transition-all active:scale-95"
+              className="btn-secondary"
             >
               Get in Touch
             </a>
           </div>
+
+          <div className="flex justify-center mb-12">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-indigo-600 text-[10px] font-bold uppercase tracking-widest border border-indigo-100/50">
+              <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
+              Available for Hire
+            </span>
+          </div>
           
-          <div className="mt-16 flex justify-center gap-6">
+          <div className="flex justify-center gap-6">
             {[
               { icon: Github, href: "https://github.com/balu105" },
               { icon: Linkedin, href: "https://linkedin.com/in/" },
@@ -243,22 +248,22 @@ const About = () => {
     <section id="about" className="py-32 max-w-7xl mx-auto px-6">
       <div className="grid lg:grid-cols-2 gap-24 items-center">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative group"
         >
-          <div className="aspect-square rounded-[3rem] overflow-hidden shadow-2xl shadow-indigo-500/10 border-8 border-white">
+          <div className="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-indigo-500/10 border-[12px] border-white relative z-10 transition-transform duration-700 group-hover:scale-[1.02]">
             <img 
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop&crop=face" 
               alt="K.C. Balaji"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-indigo-600/5 rounded-[3rem] -z-10 blur-3xl" />
-          <div className="absolute -top-10 -left-10 w-48 h-48 border-2 border-indigo-100 rounded-[3rem] -z-10" />
+          <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-indigo-600/5 rounded-[3rem] -z-10 blur-3xl" />
+          <div className="absolute -top-8 -left-8 w-48 h-48 border-2 border-indigo-100/50 rounded-[3rem] -z-10" />
         </motion.div>
 
         <motion.div
@@ -428,34 +433,34 @@ const Projects = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="group glass rounded-[2.5rem] overflow-hidden border border-white/40 hover:border-indigo-200 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10"
+            className="group glass rounded-[2.5rem] overflow-hidden border border-white/40 hover:border-indigo-200/50 transition-all duration-500 hover:shadow-[0_32px_64px_-16px_rgba(79,70,229,0.1)]"
           >
             <div className="relative h-64 overflow-hidden">
               <img 
                 src={project.image} 
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-indigo-900/0 transition-colors duration-500" />
+              <div className="absolute inset-0 bg-indigo-900/5 group-hover:bg-indigo-900/0 transition-colors duration-500" />
               <div className="absolute top-6 right-6">
-                <div className="glass p-3 rounded-2xl text-indigo-600 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+                <div className="glass p-3 rounded-2xl text-indigo-600 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 shadow-xl">
                   <ExternalLink size={20} />
                 </div>
               </div>
             </div>
             
-            <div className="p-10">
+            <div className="p-8 sm:p-10">
               <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags.map((tag, j) => (
-                  <span key={j} className="px-3 py-1 glass text-neutral-500 text-[10px] font-bold uppercase tracking-widest rounded-full border border-neutral-200/50">
+                  <span key={j} className="px-3 py-1 bg-indigo-50/50 text-indigo-600 text-[10px] font-bold uppercase tracking-widest rounded-full border border-indigo-100/50">
                     {tag}
                   </span>
                 ))}
               </div>
               
-              <h3 className="text-2xl font-bold text-neutral-900 mb-4 group-hover:text-indigo-600 transition-colors duration-300 tracking-tight">{project.title}</h3>
-              <p className="text-neutral-500 text-base mb-8 leading-relaxed line-clamp-2">{project.description}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 group-hover:text-indigo-600 transition-colors duration-300 tracking-tight">{project.title}</h3>
+              <p className="text-neutral-500 text-sm sm:text-base mb-8 leading-relaxed line-clamp-2 font-light">{project.description}</p>
               
               <div className="flex items-center justify-between pt-6 border-t border-neutral-100">
                 <a 
@@ -496,7 +501,11 @@ const Experience = () => {
 
   return (
     <section id="experience" className="py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="mb-20 text-center md:text-left">
           <span className="text-indigo-600 font-bold text-sm uppercase tracking-widest mb-3 block">Career</span>
           <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-neutral-900">Experience & Internships</h2>
@@ -509,26 +518,27 @@ const Experience = () => {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex gap-10 relative group"
+              transition={{ delay: i * 0.1, duration: 0.8 }}
+              className="flex gap-6 sm:gap-10 relative group"
             >
               <div className="hidden md:flex flex-col items-center">
-                <div className="w-16 h-16 rounded-3xl glass flex items-center justify-center text-indigo-600 shadow-lg group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                <div className="w-16 h-16 rounded-3xl glass flex items-center justify-center text-indigo-600 shadow-xl shadow-indigo-500/5 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-700 group-hover:scale-110 group-hover:rotate-3">
                   <exp.icon size={28} />
                 </div>
-                {i !== experiences.length - 1 && <div className="w-px h-full bg-neutral-200 mt-6" />}
+                {i !== experiences.length - 1 && <div className="w-px h-full bg-gradient-to-b from-indigo-100 to-transparent mt-6" />}
               </div>
               
-              <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-white/50 hover:border-indigo-200 transition-all duration-500 flex-1 shadow-xl shadow-neutral-200/20">
+              <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-white/50 hover:border-indigo-200/50 transition-all duration-500 flex-1 shadow-xl shadow-neutral-200/20 hover:shadow-[0_32px_64px_-16px_rgba(79,70,229,0.08)]">
                 <div className="flex flex-wrap justify-between items-start gap-4 sm:gap-6 mb-6">
                   <div>
-                    <h3 className="text-lg sm:text-xl font-bold mb-1 text-neutral-900">{exp.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold mb-1 text-neutral-900 group-hover:text-indigo-600 transition-colors">{exp.title}</h3>
                     <p className="text-indigo-600 font-bold text-sm sm:text-base">{exp.company}</p>
                   </div>
-                  <span className="px-4 py-1.5 sm:px-5 sm:py-2 glass rounded-full text-[10px] sm:text-xs font-bold text-neutral-500 border border-neutral-200">
+                  <span className="px-4 py-1.5 sm:px-5 sm:py-2 glass rounded-full text-[10px] sm:text-xs font-bold text-neutral-500 border border-neutral-200 group-hover:border-indigo-200 group-hover:text-indigo-600 transition-all">
                     {exp.date}
                   </span>
                 </div>
-                <p className="text-neutral-500 text-sm sm:text-base leading-relaxed max-w-3xl">{exp.description}</p>
+                <p className="text-neutral-500 text-sm sm:text-base leading-relaxed max-w-3xl font-light">{exp.description}</p>
               </div>
             </motion.div>
           ))}
@@ -565,19 +575,19 @@ const Education = () => {
       <SectionHeader label="Academics" title="Education" />
       
       <div className="grid md:grid-cols-3 gap-10">
-        {education.map((edu, i) => (
+          {education.map((edu, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="p-10 glass rounded-[2.5rem] border border-white/40 shadow-xl shadow-neutral-200/20 hover:shadow-indigo-500/5 transition-all duration-500 group"
+            className="p-8 sm:p-10 glass rounded-[2.5rem] border border-white/40 shadow-xl shadow-neutral-200/20 hover:shadow-[0_32px_64px_-16px_rgba(79,70,229,0.08)] hover:border-indigo-200/50 transition-all duration-500 group"
           >
-            <div className="w-16 h-16 glass text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-lg">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 glass text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-lg group-hover:scale-110 group-hover:-rotate-3">
               < GraduationCap size={28} />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-3 tracking-tight leading-tight">{edu.degree}</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-3 tracking-tight leading-tight group-hover:text-indigo-600 transition-colors">{edu.degree}</h3>
             <p className="text-indigo-600 font-bold text-xs sm:text-sm mb-6">{edu.school}</p>
             <div className="flex justify-between items-center pt-6 border-t border-neutral-100">
               <span className="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-widest">{edu.date}</span>
@@ -670,6 +680,39 @@ const Certifications = () => {
 };
 
 const Contact = () => {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('https://formspree.io/f/xzdaqbpb', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        (e.target as HTMLFormElement).reset();
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+      }
+    } catch (error) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  };
+
   return (
     <section id="contact" className="py-32 max-w-7xl mx-auto px-6">
       <div className="grid lg:grid-cols-2 gap-24">
@@ -716,42 +759,64 @@ const Contact = () => {
           transition={{ duration: 0.8 }}
           className="glass p-10 md:p-16 rounded-[3rem] border border-white/50 shadow-2xl shadow-indigo-500/5"
         >
-          <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); alert('Message sent! (Demo)'); }}>
-            <div className="grid sm:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Name</label>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest ml-1">Name</label>
                 <input 
                   type="text" 
+                  name="name"
                   placeholder="John Doe"
-                  className="w-full px-6 py-5 glass border border-neutral-200/50 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all placeholder:text-neutral-300"
+                  className="input-field"
                   required
                 />
               </div>
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Email</label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest ml-1">Email</label>
                 <input 
                   type="email" 
+                  name="email"
                   placeholder="john@example.com"
-                  className="w-full px-6 py-5 glass border border-neutral-200/50 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all placeholder:text-neutral-300"
+                  className="input-field"
                   required
                 />
               </div>
             </div>
-            <div className="space-y-3">
-              <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Message</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest ml-1">Message</label>
               <textarea 
-                rows={5} 
+                rows={4} 
+                name="message"
                 placeholder="How can I help you?"
-                className="w-full px-6 py-5 glass border border-neutral-200/50 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all resize-none placeholder:text-neutral-300"
+                className="input-field resize-none"
                 required
               />
             </div>
             <button 
               type="submit"
-              className="w-full py-6 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 flex items-center justify-center gap-4 active:scale-[0.98] text-lg"
+              disabled={status === 'loading'}
+              className="btn-primary w-full py-5 text-base flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Send Message <Send size={22} />
+              {status === 'loading' ? (
+                <>Sending... <Loader2 className="animate-spin" size={20} /></>
+              ) : status === 'success' ? (
+                <>Sent Successfully! <CheckCircle2 size={20} /></>
+              ) : status === 'error' ? (
+                <>Error Sending. Try Again</>
+              ) : (
+                <>Send Message <Send size={20} /></>
+              )}
             </button>
+            {status === 'success' && (
+              <p className="text-center text-emerald-600 text-sm font-medium animate-pulse">
+                Thank you! Your message has been received.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="text-center text-rose-600 text-sm font-medium">
+                Something went wrong. Please try again later.
+              </p>
+            )}
           </form>
         </motion.div>
       </div>
